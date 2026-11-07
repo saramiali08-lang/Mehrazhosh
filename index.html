@@ -53,6 +53,29 @@ footer{text-align:center;color:#697386;padding:20px;font-size:13px}
 <button type="submit">ثبت درخواست آزمایشی</button><p id="msg" class="small" aria-live="polite"></p></form></section>
 </main><footer>فراهوش | گروه آموزشی مهرازهوش</footer>
 <script>
-document.getElementById('reg').addEventListener('submit',function(e){e.preventDefault();document.getElementById('msg').textContent='درخواست شما در این پیش‌نمایش ثبت واقعی نمی‌شود. برای فعال‌سازی ثبت‌نام آنلاین، باید سامانه و راه ارتباطی پشتیبانی متصل شود.';});
+document.getElementById('reg').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = this;
+  const msg = document.getElementById('msg');
+  const data = new FormData(form);
+
+  msg.textContent = 'در حال ارسال درخواست...';
+
+  try {
+    await fetch('https://script.google.com/macros/s/AKfycbybZ4xi1yOwXts5VaEpMqxxm7ErYv5vY-fktD6RpB8IyfGu_njUbuZawL_ITRamizEV/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      body: new URLSearchParams(data)
+    });
+
+    msg.textContent = 'درخواست ارسال شد. برای اطمینان، ثبت اطلاعات را در جدول بررسی می‌کنیم.';
+    form.reset();
+
+  } catch (error) {
+    msg.textContent = 'ارسال درخواست ناموفق بود. لطفاً دوباره تلاش کنید.';
+  }
+});
+
 </script>
 </body></html>
