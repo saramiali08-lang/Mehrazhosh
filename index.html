@@ -157,7 +157,6 @@ footer{text-align:center;color:#697386;padding:20px;font-size:13px}
 <script>
 const form = document.getElementById('reg');
 const msg = document.getElementById('msg');
-const frame = document.getElementById('submitFrame');
 
 form.addEventListener('submit', function(e) {
   e.preventDefault();
@@ -177,16 +176,13 @@ form.addEventListener('submit', function(e) {
     hiddenForm.appendChild(input);
   });
 
-  frame.onload = function() {
-    msg.textContent = 'ثبت‌نام شما با موفقیت انجام شد.';
-    form.reset();
-    hiddenForm.remove();
-    frame.onload = null;
-  };
-
   document.body.appendChild(hiddenForm);
   msg.textContent = 'در حال ارسال درخواست...';
   hiddenForm.submit();
+
+  setTimeout(function() {
+    hiddenForm.remove();
+  }, 3000);
 });
 </script>
 </body>
