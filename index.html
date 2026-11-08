@@ -151,6 +151,7 @@ footer{text-align:center;color:#697386;padding:20px;font-size:13px}
 
 </form>
 </section></main><footer>فراهوش | گروه آموزشی مهرازهوش</footer>
+
 <iframe name="submitFrame" id="submitFrame" style="display:none"></iframe>
 
 <script>
@@ -158,14 +159,10 @@ const form = document.getElementById('reg');
 const msg = document.getElementById('msg');
 const frame = document.getElementById('submitFrame');
 
-let submitted = false;
-
 form.addEventListener('submit', function(e) {
   e.preventDefault();
 
   if (!form.reportValidity()) return;
-
-  submitted = true;
 
   const hiddenForm = document.createElement('form');
   hiddenForm.method = 'POST';
@@ -180,17 +177,16 @@ form.addEventListener('submit', function(e) {
     hiddenForm.appendChild(input);
   });
 
+  frame.onload = function() {
+    msg.textContent = 'ثبت‌نام شما با موفقیت انجام شد.';
+    form.reset();
+    hiddenForm.remove();
+    frame.onload = null;
+  };
+
   document.body.appendChild(hiddenForm);
   msg.textContent = 'در حال ارسال درخواست...';
   hiddenForm.submit();
-
- setTimeout(function() {
-  msg.textContent = 'ثبت‌نام شما با موفقیت انجام شد.';
-  form.reset();
-  submitted = false;
-  hiddenForm.remove();
-}, 3000);
-  };
 });
 </script>
 </body>
