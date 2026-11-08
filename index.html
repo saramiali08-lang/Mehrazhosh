@@ -153,6 +153,7 @@ footer{text-align:center;color:#697386;padding:20px;font-size:13px}
 </section></main><footer>فراهوش | گروه آموزشی مهرازهوش</footer>
 <script>
 <iframe name="submitFrame" style="display:none"></iframe>
+<iframe name="submitFrame" id="submitFrame" style="display:none"></iframe>
 
 <script>
 const form = document.getElementById('reg');
@@ -161,16 +162,15 @@ const msg = document.getElementById('msg');
 form.addEventListener('submit', function(e) {
   e.preventDefault();
 
-  const data = new FormData(form);
-
-  msg.textContent = 'در حال ارسال درخواست...';
+  if (!form.reportValidity()) return;
 
   const hiddenForm = document.createElement('form');
   hiddenForm.method = 'POST';
   hiddenForm.action = 'https://script.google.com/macros/s/AKfycbwa-s0ItLLsIKp654t7rExzyHbqyMRuns2n4DWmIi9-E-lsPhRKsB3m830upREDf6k2kg/exec';
   hiddenForm.target = 'submitFrame';
+  hiddenForm.style.display = 'none';
 
-  data.forEach(function(value, key) {
+  new FormData(form).forEach(function(value, key) {
     const input = document.createElement('input');
     input.type = 'hidden';
     input.name = key;
@@ -179,9 +179,15 @@ form.addEventListener('submit', function(e) {
   });
 
   document.body.appendChild(hiddenForm);
+  msg.textContent = 'در حال ارسال درخواست...';
   hiddenForm.submit();
-  hiddenForm.remove();
 
+  setTimeout(function() {
+    hiddenForm.remove();
+  }, 3000);
+});
+
+document.getElementById('submitFrame').addEventListener('load', function() {
   msg.textContent = 'درخواست ارسال شد؛ لطفاً ثبت اطلاعات را بررسی کنید.';
 });
 </script>
