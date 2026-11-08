@@ -184,13 +184,14 @@ form.addEventListener('submit', function(e) {
   msg.textContent = 'در حال ارسال درخواست...';
   hiddenForm.submit();
 
-  frame.onload = function() {
+ frame.onload = function() {
     if (!submitted) return;
 
     msg.textContent = 'ثبت‌نام شما با موفقیت انجام شد.';
     form.reset();
     submitted = false;
     hiddenForm.remove();
+  };
   };
 });
 </script>
