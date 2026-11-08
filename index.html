@@ -155,13 +155,30 @@ footer{text-align:center;color:#697386;padding:20px;font-size:13px}
 <iframe name="submitFrame" id="submitFrame" style="display:none"></iframe>
 
 <script>
+
 const form = document.getElementById('reg');
 const msg = document.getElementById('msg');
+const submitFrame = document.getElementById('submitFrame');
+const submitButton = form.querySelector('button[type="submit"]');
+
+let waitingForResponse = false;
+let responseTimer;
+
+submitFrame.addEventListener('load', function() {
+  if (!waitingForResponse) return;
+
+  waitingForResponse = false;
+  clearTimeout(responseTimer);
+
+  msg.textContent = 'پاسخ سرور دریافت شد؛ درخواست ثبت‌نام ارسال گردید.';
+  submitButton.disabled = false;
+});
 
 form.addEventListener('submit', function(e) {
   e.preventDefault();
 
   if (!form.reportValidity()) return;
+  if (waitingForResponse) return;
 
   const hiddenForm = document.createElement('form');
   hiddenForm.method = 'POST';
@@ -177,13 +194,26 @@ form.addEventListener('submit', function(e) {
   });
 
   document.body.appendChild(hiddenForm);
+
+  waitingForResponse = true;
+  submitButton.disabled = true;
   msg.textContent = 'در حال ارسال درخواست...';
+
   hiddenForm.submit();
 
   setTimeout(function() {
     hiddenForm.remove();
   }, 3000);
+
+  responseTimer = setTimeout(function() {
+    if (!waitingForResponse) return;
+
+    waitingForResponse = false;
+    submitButton.disabled = false;
+    msg.textContent = 'پاسخی از سرور دریافت نشد؛ ثبت اطلاعات را در سامانه بررسی کنید.';
+  }, 20000);
 });
+
 </script>
 </body>
 </html>
