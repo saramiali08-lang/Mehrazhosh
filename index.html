@@ -155,26 +155,35 @@ footer{text-align:center;color:#697386;padding:20px;font-size:13px}
 <iframe name="submitFrame" style="display:none"></iframe>
 
 <script>
-document.getElementById('reg').addEventListener('submit', function(e) {
+const form = document.getElementById('reg');
+const msg = document.getElementById('msg');
+
+form.addEventListener('submit', function(e) {
   e.preventDefault();
 
-  const form = this;
-  const msg = document.getElementById('msg');
-
-  form.action = 'https://script.google.com/macros/s/AKfycbwa-s0ItLLsIKp654t7rExzyHbqyMRuns2n4DWmIi9-E-lsPhRKsB3m830upREDf6k2kg/exec';
-  form.method = 'POST';
-  form.target = 'submitFrame';
+  const data = new FormData(form);
 
   msg.textContent = 'در حال ارسال درخواست...';
 
-  form.submit();
+  const hiddenForm = document.createElement('form');
+  hiddenForm.method = 'POST';
+  hiddenForm.action = 'https://script.google.com/macros/s/AKfycbwa-s0ItLLsIKp654t7rExzyHbqyMRuns2n4DWmIi9-E-lsPhRKsB3m830upREDf6k2kg/exec';
+  hiddenForm.target = 'submitFrame';
 
-  msg.textContent = 'درخواست ارسال شد؛ در حال بررسی ثبت اطلاعات...';
+  data.forEach(function(value, key) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = value;
+    hiddenForm.appendChild(input);
+  });
 
-  setTimeout(function() {
-    form.reset();
-  }, 1000);
+  document.body.appendChild(hiddenForm);
+  hiddenForm.submit();
+  hiddenForm.remove();
+
+  msg.textContent = 'درخواست ارسال شد؛ لطفاً ثبت اطلاعات را بررسی کنید.';
 });
 </script>
-</script>
-</body></html>
+</body>
+</html>
